@@ -6,6 +6,7 @@ const passportJwt = require('../middleware/auth.middleware')
 
 //* /api/v1/perfectskin/users/
 router.get('/',[passportJwt, roleAdminMiddleware], userService.getAll)
+
 // router.post('/', userService.register)
 
 //? /api/v1/users/me
