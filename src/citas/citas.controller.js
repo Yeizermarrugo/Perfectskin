@@ -5,6 +5,7 @@ const Horarios = require('../models/horarios.models')
 const Users = require('../models/user.model')
 const DayOff = require('../models/dayOff.models')
 const response = require('../utils/handleResponses')
+
 const getAllCitas = async () => {
     const data = await Citas.findAll({
         include: [
@@ -126,7 +127,7 @@ const editCita = async (id, data, userId) => {
     const response = await Citas.update(data, {
         where: { id: id }
     })
-    response
+    return response
 }
 
 const deleteCita = async (id) => {
