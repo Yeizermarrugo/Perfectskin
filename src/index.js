@@ -4,6 +4,7 @@ const compression = require('compression')
 const resHandler = require('./utils/handleResponses')
 const initModels = require('./models/initModels')
 const config = require('../config').api
+const swaggerUi = require('swagger-ui-express')
 //*archivos de rutas
 const userRoute = require('./users/user.routes').router
 const authRoute = require('./auth/auth.routes').router
@@ -11,6 +12,7 @@ const serviceRoute = require('./servicios/servicios.routes').router
 const horarioRoute = require('./horarios/horarios.routes').router
 const dayOffRoute = require('./DayOff/dayOff.routes').router
 const citasRoute = require('./citas/citas.routes').router
+const swaggerDoc = require('./swagger.json')
 
 //* Conexion BD
 const db = require('./utils/database')
@@ -47,9 +49,10 @@ app.get('/', (req, res) => {
 app.use('/api/v1/perfectskin/users', userRoute);
 app.use('/api/v1/perfectskin/auth', authRoute);
 app.use('/api/v1/perfectskin/servicios', serviceRoute);
-app.use('/api/v1/perfectskin/horas', horarioRoute)
-app.use('/api/v1/perfectskin/dayoff', dayOffRoute)
-app.use('/api/v1/perfectskin/citas', citasRoute)
+app.use('/api/v1/perfectskin/horas', horarioRoute);
+app.use('/api/v1/perfectskin/dayoff', dayOffRoute);
+app.use('/api/v1/perfectskin/citas', citasRoute);
+app.use('/v1/perfectskin/doc', swaggerUi.serve, swaggerUi.setup(swaggerDoc))
 app.use('*', (req, res)=> {
     resHandler.error({
         res,
