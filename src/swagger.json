@@ -1,3 +1,67 @@
 {
-    
+    "openapi": "3.0.1",
+    "info": {
+        "title": "API REST Agenda de citas",
+        "version": "1.0.0"
+    },
+    "components": {
+        "securitySchemes": {
+            "bearerAuth":{
+                "type": "http",
+                "scheme": "bearer",
+                "bearerFormat": "JWT"
+            }
+        }
+    },
+    "security": [
+        {
+            "bearerAuth": []
+
+        }
+    ],
+    "paths": {
+        "/api/v1/perfectskin/users/": {
+            "get": {
+                "description": "Obtener todos los usuarios",
+                "tags": [
+                    "Users",
+                    "v1"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Obtenemos exitosamente todos los usuarios"
+                    },
+                    "400": {
+                        "description": "Generamos un error en caso de que la peticion no se resuelva"
+                    }
+                }
+            }
+        },
+        "/api/v1/perfectskin/users/{id}": {
+            "get": {
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Id del usuario",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "description": "Obtenemos un usuario en especifico",
+                "tags": [
+                    "Users",
+                    "v1"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Obtenemos exitosamente el usuario"
+                    },
+                    "400": {
+                        "description": "Generamos un error en caso de que la peticion no se resuelva"
+                    }
+                }
+            }
+        }
+    }
 }
