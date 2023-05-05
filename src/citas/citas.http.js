@@ -103,13 +103,17 @@ const register = async (req, res) => {
 const edit = async (req, res) => {
     const id = req.params.id;
     const userId = req.user.id; // obtener el ID del usuario autenticado
+    const user = await Users.findByPk(req.user.id);
+    const roles = await Roles.findAll({id: {$in: user.role_id}})
     const cita = await citasController.getCitasById({ where: { id: id } });
 
     if (!cita) {
         return res.status(404).json({ message: "La cita no existe" });
     }
-    if (cita.userId !== userId) {
-        return res.status(403).json({ message: "No está autorizado para modificar esta cita" });
+    for(let i = 0; i < roles.length; i++) {
+        if(cita.userId !== userId && user.roleId !== "6288423f-4596-41db-9d22-e93639025e61"){
+            return res.status(403).json({message: "No estas autorizado para modificar esta cita"})
+        }
     }
     const data = req.body;
     await citasController.editCita(data, { where: { id: id } });
@@ -120,53 +124,46 @@ const edit = async (req, res) => {
 
 
 
-const remove = async (req, res) => {
+  const remove = async (req, res) => {
     const id = req.params.id;
-    const userId = req.user.id; // obtener el ID del usuario autenticado
+    const userId = req.user.id;
     const user = await Users.findByPk(req.user.id);
-    const roles = await Roles.findAll({ id: { $in: user.role_id } });
-  console.log(user);
-  console.log(roles);
-
-  const cita = await citasController.getCitasById(id);
-  if (!cita) {
-    return res.status(404).json({ message: "La cita no existe" });
-  }
-  for (let i = 0; i < roles.length; i++) {
-    if (cita.userId !== userId && user.roleId !== "6288423f-4596-41db-9d22-e93639025e61") {
-        console.log(user.roleId);
-        return res.status(403).json({ message: "No está autorizado para eliminar esta cita" });
-    }
-  }  
-    await citasController.deleteCita(id)
-      .then(data => {
-        if (data) {
-          responses.success({
-            status: 200,
-            data,
-            message: `Appointment with id: ${id} deleted successfully`,
-            res
-          })
-        } else {
-          responses.error({
-            status: 404,
-            data: err,
-            message: `The appointment with ID ${id} not found`,
-            res
-          })
+    const roles = await Roles.findAll({id: {$in: user.role_id}})
+     const cita = await citasController.getCitasById(id)
+     if(!cita) {
+        return res.status(404).json({message: "La cita no existe"})
+     }
+     for(let i = 0; i < roles.length; i++) {
+        if(cita.userId !== userId && user.roleId !== "6288423f-4596-41db-9d22-e93639025e61"){
+            return res.status(403).json({message: "No estas autorizado para eliminar esta cita"})
         }
-      })
-      .catch(err => {
+     }
+     await citasController.deleteCita(id)
+     .then(data => {
+        if(data) {
+            responses.success({
+                status: 200,
+                data,
+                message: `Appointment with id: ${id} deleted successfully`,
+                res
+            })
+        }else{
+            responses.error({
+                status: 404,
+                data: err,
+                message: `The appointment with id: ${id} not found`
+            })
+        }
+     })
+     .catch(err => {
         responses.error({
-          status: 400,
-          data: err,
-          message: `Error ocurred trying to delete appointment with id ${id}`,
-          res
+            status: 400,
+            data: err,
+            message: `Error ocurred trying to delete appointment with id: ${id}`,
+            res
         })
-      })
-  };
-  
-  
+     })
+  }
 
 
   
