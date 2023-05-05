@@ -123,12 +123,12 @@ const createCitas = async (data, userId,) => {
     return { success: true, data: newCita }
 }
 
-const editCita = async (id, data, userId) => {
-    const response = await Citas.update(data, {
-        where: { id: id }
-    })
-    return response
-}
+const editCita = async (citaId, newData) => {
+    return Citas.update(newData, {
+      where: { id: citaId }
+    });
+  }
+  
 
 const deleteCita = async (id) => {
     const data = await Citas.destroy({
