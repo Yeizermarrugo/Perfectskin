@@ -53,39 +53,39 @@ const getById = (req, res) => {
         })
 }
 
-const getAllAppointmentsByUser = (req, res) =>{
+const getAllAppointmentsByUser = (req, res) => {
     const userId = req.user.id
     citasController.getAllCitasByUser(userId)
-    .then(data => {
-        if (data) {
-            responses.success({
-                status: 200,
-                data,
-                message: `Getting yours appoinments: ${userId}`,
-                res
-            })
-        } else {
-            responses.error({
-                status: 404,
-                message: `Appointment by ${req.user}, not found`,
-                res
-            })
-        }
-    })
-    .catch(err => {
-        responses.error({
-            status: 400,
-            data: err,
-            message: 'Something bad getting the Appointment',
-            res
+        .then(data => {
+            if (data) {
+                responses.success({
+                    status: 200,
+                    data,
+                    message: `Getting yours appoinments: ${userId}`,
+                    res
+                })
+            } else {
+                responses.error({
+                    status: 404,
+                    message: `Appointment by ${req.user}, not found`,
+                    res
+                })
+            }
         })
-    })
+        .catch(err => {
+            responses.error({
+                status: 400,
+                data: err,
+                message: 'Something bad getting the Appointment',
+                res
+            })
+        })
 }
 
 const register = async (req, res) => {
     const userId = req.user.id
     const data = req.body
-    const currentDate = new Date().toLocaleDateString("en-US", {timeZone: "America/Bogota"});;
+    const currentDate = new Date().toLocaleDateString("en-US", { timeZone: "America/Bogota" });;
     const selectedDate = new Date(data.fecha);
 
     if (selectedDate < currentDate) {
@@ -93,7 +93,7 @@ const register = async (req, res) => {
     }
     const result = await citasController.createCitas(data, userId);
     if (result.success) {
-        res.status(201).json({ data: result.data, message: `Appointment created successfully with id: ${result.data.id} for the day ${result.data.fecha}`});
+        res.status(201).json({ data: result.data, message: `Appointment created successfully with id: ${result.data.id} for the day ${result.data.fecha}` });
     } else {
         res.status(400).json({ error: result.message });
     }
@@ -101,72 +101,78 @@ const register = async (req, res) => {
 
 
 const edit = async (req, res) => {
-    const id = req.params.id;
-    const userId = req.user.id; // obtener el ID del usuario autenticado
-    const user = await Users.findByPk(req.user.id);
-    const roles = await Roles.findAll({id: {$in: user.role_id}})
-    const cita = await citasController.getCitasById({ where: { id: id } });
+    try {
+        const id = req.params.id;
+        const citaId = req.params.id;
+        const newData = req.body;
+        const userId = req.user.id; // obtener el ID del usuario autenticado
+        const user = await Users.findByPk(req.user.id);
+        const roles = await Roles.findAll({ id: { $in: user.role_id } })
+        const cita = await citasController.getCitasById(id);
+        if (!cita) {
+            return res.status(404).json({ message: "La cita no existe" });
+        } else {
 
-    if (!cita) {
-        return res.status(404).json({ message: "La cita no existe" });
-    }
-    for(let i = 0; i < roles.length; i++) {
-        if(cita.userId !== userId && user.roleId !== "6288423f-4596-41db-9d22-e93639025e61"){
-            return res.status(403).json({message: "No estas autorizado para modificar esta cita"})
+            for (let i = 0; i < roles.length; i++) {
+                if (cita.userId !== userId && user.roleId !== "6288423f-4596-41db-9d22-e93639025e61") {
+                    return res.status(403).json({ message: "No estas autorizado para modificar esta cita" })
+                }
+            }
         }
-    }
-    const data = req.body;
-    await citasController.editCita(data, { where: { id: id } });
-    const updatedCita = await citasController.getCitasById({ where: { id: id } });
+        const response = await citasController.editCita(citaId, newData);
 
-    return res.status(200).json(updatedCita);
+        res.status(200).json({ message: "Cita actualizada con exito", newData });
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Ha ocurrido un error al editar la cita.');
+    }
 };
 
 
 
-  const remove = async (req, res) => {
+const remove = async (req, res) => {
     const id = req.params.id;
     const userId = req.user.id;
     const user = await Users.findByPk(req.user.id);
-    const roles = await Roles.findAll({id: {$in: user.role_id}})
-     const cita = await citasController.getCitasById(id)
-     if(!cita) {
-        return res.status(404).json({message: "La cita no existe"})
-     }
-     for(let i = 0; i < roles.length; i++) {
-        if(cita.userId !== userId && user.roleId !== "6288423f-4596-41db-9d22-e93639025e61"){
-            return res.status(403).json({message: "No estas autorizado para eliminar esta cita"})
+    const roles = await Roles.findAll({ id: { $in: user.role_id } })
+    const cita = await citasController.getCitasById(id)
+    if (!cita) {
+        return res.status(404).json({ message: "La cita no existe" })
+    }
+    for (let i = 0; i < roles.length; i++) {
+        if (cita.userId !== userId && user.roleId !== "6288423f-4596-41db-9d22-e93639025e61") {
+            return res.status(403).json({ message: "No estas autorizado para eliminar esta cita" })
         }
-     }
-     await citasController.deleteCita(id)
-     .then(data => {
-        if(data) {
-            responses.success({
-                status: 200,
-                data,
-                message: `Appointment with id: ${id} deleted successfully`,
+    }
+    await citasController.deleteCita(id)
+        .then(data => {
+            if (data) {
+                responses.success({
+                    status: 200,
+                    data,
+                    message: `Appointment with id: ${id} deleted successfully`,
+                    res
+                })
+            } else {
+                responses.error({
+                    status: 404,
+                    data: err,
+                    message: `The appointment with id: ${id} not found`
+                })
+            }
+        })
+        .catch(err => {
+            responses.error({
+                status: 400,
+                data: err,
+                message: `Error ocurred trying to delete appointment with id: ${id}`,
                 res
             })
-        }else{
-            responses.error({
-                status: 404,
-                data: err,
-                message: `The appointment with id: ${id} not found`
-            })
-        }
-     })
-     .catch(err => {
-        responses.error({
-            status: 400,
-            data: err,
-            message: `Error ocurred trying to delete appointment with id: ${id}`,
-            res
         })
-     })
-  }
+}
 
 
-  
+
 
 module.exports = {
     getAll,
