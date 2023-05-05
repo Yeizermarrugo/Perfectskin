@@ -1,8 +1,12 @@
+
+![LOGO LAURA final_Mesa de trabajo 1 copia 3 (1)](https://user-images.githubusercontent.com/104544010/235232799-930d4b6b-680d-43c4-adf6-34b6c577f300.png)
+
+
 Este proyecto es un backend con NodeJS para una aplicación de agenda de citas. El usuario puede interactuar con el sistema para tomar un turno o cita para un tratamiento o servicio. El proyecto incluye la gestión de citas, la validación de datos, el control de acceso y la comunicación con una base de datos. Los desarrolladores pueden contribuir al proyecto mejorando la eficiencia del código, agregando nuevas funcionalidades, optimizando la seguridad y la escalabilidad del sistema.
 
-###### RUTAS ######
+# RUTAS
 
-# Usuarios
+## Usuarios
 
 - /api/v1/perfectskin/users
 - GET (ADMIN)
@@ -17,20 +21,20 @@ Este proyecto es un backend con NodeJS para una aplicación de agenda de citas. 
 - - PATCH
 - - DELETE
 
-# Inicio Sesion
+## Inicio Sesion
 - /api/v1/perfectskin/auth/login
 - - POST 
 
-# Registrarse
+## Registrarse
 - /api/v1/perfectskin/auth/register
 - - POST
 
-# Recuperar contraseña
+## Recuperar contraseña
 - /api/v1/perfectskin/auth/password-recovery
 - - POST
 - - PATCH
 
-# Servicios
+## Servicios
 - /api/v1/perfectskin/servicios
 - GET
 - POST (ADMIN)
@@ -40,7 +44,7 @@ Este proyecto es un backend con NodeJS para una aplicación de agenda de citas. 
 -PATCH (ADMIN)
 - DELETE (ADMIN)
 
-# Horarios (Horas de atencion por dias)
+## Horarios (Horas de atencion por dias)
 - /api/v1/perfectskin/horas
 - GET
 - POST (ADMIN)
@@ -59,7 +63,7 @@ Este proyecto es un backend con NodeJS para una aplicación de agenda de citas. 
 - GET
 - DELETE (ADMIN)
 
-# Citas
+## Citas
 - /api/v1/perfectskin/citas
 - GET
 - POST (Logged In)
@@ -80,14 +84,14 @@ Este proyecto es un backend con NodeJS para una aplicación de agenda de citas. 
     1. Ver las citas (Calendario)
     2. Puede ver la informacion de los servicios
 
-### Usuario logeado 
+## Usuario logeado 
 
     1. Ver las citas
     2. Puede ver la informacion de los servicios
     3. Agendar una cita (Min 1 dia de anticipacion)
     4. Cancelar su cita
 
-#### Admin
+## Admin
     1. Agendar citas
     2. Modifiar una cita agendada
     3. Eliminar una cita agendada
