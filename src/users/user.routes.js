@@ -15,7 +15,7 @@ router.patch('/me', passportJwt, userService.editMyuser)
 router.delete('/me', passportJwt, userService.removeMyUser)
 
 
-router.get('/:id', userService.getById)
+router.get('/:id', [passportJwt, roleAdminMiddleware], userService.getById)
 router.patch('/:id',[passportJwt, roleAdminMiddleware], userService.edit)
 router.delete('/:id',[passportJwt, roleAdminMiddleware], userService.remove)
 
