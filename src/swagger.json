@@ -5,8 +5,48 @@
         "version": "1.0.0"
     },
     "components": {
+        "schemas": {
+            "LoginData": {
+                "type": "object",
+                "properties": {
+                    "email": {
+                        "type": "string",
+                        "description": "Email del usuario"
+                    },
+                    "password": {
+                        "type": "string",
+                        "description": "Contraseña del usuario"
+                    }
+                }
+            },
+            "Registers": {
+                "type": "object",
+                "properties": {
+                    "nombre": {
+                        "type": "string",
+                        "description": "Nombre del usuario"
+                    },
+                    "apellido": {
+                        "type": "string",
+                        "description": "Apellido del usuario"
+                    },
+                    "email": {
+                        "type": "string",
+                        "description": "Email del usuario"
+                    },
+                    "password": {
+                        "type": "string",
+                        "description": "Contraseña del usuario"
+                    },
+                    "telefono": {
+                        "type": "number",
+                        "description": "Telefono del usuario"
+                    }
+                }
+            }
+        },
         "securitySchemes": {
-            "bearerAuth":{
+            "bearerAuth": {
                 "type": "http",
                 "scheme": "bearer",
                 "bearerFormat": "JWT"
@@ -16,10 +56,65 @@
     "security": [
         {
             "bearerAuth": []
-
         }
     ],
     "paths": {
+        "/api/v1/perfectskin/auth/register": {
+            "post": {
+                "description": "Crear un usuario",
+                "tags": [
+                    "Register",
+                    "v1"
+                ],
+                "requestBody": {
+                    "description": "Insertar datos del usuario",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Registers"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Usuario creado exitosamente"
+                    },
+                    "400": {
+                        "description": "Error intentando crear nuevo usuario"
+                    }
+                }
+            }
+        },
+        "/api/v1/perfectskin/auth/login": {
+            "post": {
+                "description": "Iniciar sesion",
+                "tags": [
+                    "Auth",
+                    "v1"
+                ],
+                "requestBody": {
+                    "description": "Solicitud de Inicio de sesion",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/LoginData"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Inicio de sesion exitoso"
+                    },
+                    "401": {
+                        "description": "Credenciales Invalidas"
+                    }
+                }
+            }
+        },
         "/api/v1/perfectskin/users/": {
             "get": {
                 "description": "Obtener todos los usuarios",
@@ -62,6 +157,65 @@
                     }
                 }
             }
+        },
+        "/api/v1/perfectskin/users/me": {
+            "get": {
+                "description": "Obtener mi usuarios",
+                "tags": [
+                    "Users",
+                    "v1"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Obtenemos exitosamente el usuario loggeado"
+                    },
+                    "400": {
+                        "description": "Generamos un error en caso de que la peticion no se resuelva"
+                    }
+                }
+            },
+            "patch": {
+                "description": "Editar mi usuario",
+                "tags": [
+                    "Users",
+                    "v1"
+                ],
+                "requestBody": {
+                    "description": "Insertar datos del usuario",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Registers"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200":{
+                        "description": "Usuario editado exitosamente"
+                    },
+                    "400": {
+                        "description": "Generamos un error en caso de que la peticion no se resuelva"
+                    }
+                }
+            },
+            "delete": {
+                "description": "Eliminar mi usuarios",
+                "tags": [
+                    "Users",
+                    "v1"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Eliminaste exitosamente tu usuario"
+                    },
+                    "400": {
+                        "description": "Generamos un error en caso de que la peticion no se resuelva"
+                    }
+                }
+            }
         }
+
     }
 }
