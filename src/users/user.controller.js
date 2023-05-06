@@ -51,11 +51,15 @@ const editUser = async (userId, data, userRole) => {
     if ('6288423f-4596-41db-9d22-e93639025e61' === data.roleId){
         const response = await Users.update(
             {...restOfProperties, roleId},
-            {where: {id: userId}}
+            {where: {id: userId}, attributes: {
+                exclude: ["password"]
+            }},
         )
         return response
     }else{
-        const response = await Users.update(restOfProperties, {where: {id: userId}})
+        const response = await Users.update(restOfProperties, {where: {id: userId}, attributes: {
+            exclude: ["password"]
+        }})
         return response
     }
 }

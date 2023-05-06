@@ -141,44 +141,42 @@ const getMyUserById = (req, res) => {
 
 const removeMyUser = (req, res) => {
     const id = req.user.id
-
-    userController.deleteUser(id)
-        .then(data => {
-            responses.success({
-                res,
-                status: 200,
-                message: `User deleted successfully with id: ${id}`
-            })
+    const data = userController.deleteUser(id)
+    if (data) {
+        return responses.success({
+            res,
+            status: 200,
+            message: `User deleted successfully with id: ${id}`,
+            data: data
         })
-        .catch(err => {
-            responses.error({
-                res,
-                status: 400,
-                message: 'Something bad trying to delete this user'
-            })
-        })
-
+    }else{
+    return responses.error({
+        res,
+        status: 400,
+        message: 'Something bad trying to delete this user',
+        err
+    })
+}
 }
 
 const editMyuser = (req, res) => {
-    const id = req.user.id //? Esto es unicamente para saber quien es el usuario
-
+    const userId = req.user.id //? Esto es unicamente para saber quien es el usuario
     const { nombre, apellido, email, password, telefono } = req.body
 
-    const userObj = {
+    const data = {
         nombre,
         apellido,
         email,
         password: hashPassword(password),
         telefono
     }
-
-    userController.editUser(id, userObj)
+    userController.editUser(userId, data)
         .then(() => {
             responses.success({
                 res,
                 status: 200,
                 message: 'Your user has been updated succesfully!',
+                data: data
             })
         })
         .catch(err => {
