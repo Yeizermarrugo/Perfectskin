@@ -2,6 +2,9 @@ const citasController = require('./citas.controller')
 const responses = require('../utils/handleResponses')
 const Users = require('../models/user.model')
 const Roles = require('../models/roles.model')
+const Horarios = require('../models/horarios.models')
+const enviarCorreoCita = require('../utils/mailer')
+const {generarMensajeHTML} = require('../utils/mensajeHTML')
 
 const getAll = (req, res) => {
     citasController.getAllCitas()
@@ -82,23 +85,58 @@ const getAllAppointmentsByUser = (req, res) => {
         })
 }
 
+// const register = async (req, res) => {
+//     const userId = req.user.id
+//     const data = req.body
+//     const currentDate = new Date().toLocaleDateString("en-US", { timeZone: "America/Bogota" });;
+//     const selectedDate = new Date(data.fecha);
+
+//     if (selectedDate < currentDate) {
+//         return res.status(400).json({ error: 'No se aceptan citas en fechas pasadas' });
+//     }
+//     const result = await citasController.createCitas(data, userId);
+//     if (result.success) {
+//         res.status(201).json({ data: result.data, message: `Appointment created successfully with id: ${result.data.id} for the day ${result.data.fecha}` });
+//     } else {
+//         res.status(400).json({ error: result.message });
+//     }
+// }
+
 const register = async (req, res) => {
-    const userId = req.user.id
-    const data = req.body
-    const currentDate = new Date().toLocaleDateString("en-US", { timeZone: "America/Bogota" });;
+    const userId = req.user.id;
+    const data = req.body;
+    const currentDate = new Date().toLocaleDateString("en-US", { timeZone: "America/Bogota" });
     const selectedDate = new Date(data.fecha);
 
     if (selectedDate < currentDate) {
         return res.status(400).json({ error: 'No se aceptan citas en fechas pasadas' });
     }
+
+    // Agrega el correo del usuario al objeto cita
+    const user = await Users.findByPk(userId);
+    console.log(user.email, "<---- Este es el user");
+
     const result = await citasController.createCitas(data, userId);
+    console.log("Este es el result", result);
+    const horario = await Horarios.findByPk(result.data?.horarioId);
+    console.log("Este es el horario", horario);
+
     if (result.success) {
+        // Envía el correo electrónico después de que se crea la cita
+        const cita = result.data;
+        const asunto = 'Confirmación de cita';
+        const mensaje = generarMensajeHTML(cita, horario);
+        console.log(cita);
+        enviarCorreoCita(user.email, asunto, mensaje);
+
         res.status(201).json({ data: result.data, message: `Appointment created successfully with id: ${result.data.id} for the day ${result.data.fecha}` });
     } else {
         res.status(400).json({ error: result.message });
     }
 }
 
+
+  
 
 const edit = async (req, res) => {
     try {
