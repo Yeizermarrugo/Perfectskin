@@ -103,7 +103,7 @@ const edit = (req, res) => {
         const response = serviceController.editService(id, data)
         return res.status(200).json({
             message: 'Service edited succesfully',
-            service: response
+            service: data
         })
     }
 
