@@ -43,6 +43,23 @@
                         "description": "Telefono del usuario"
                     }
                 }
+            },
+            "Create Service": {
+                "type": "object",
+                "properties": {
+                    "nombre": {
+                        "type": "string",
+                        "description": "Nombre del servicio"
+                    },
+                    "descripcion":{
+                        "type": "string",
+                        "description": "Descripcion del servicio"
+                    },
+                    "precio":{
+                        "type": "number",
+                        "description": "Precio del servicio"
+                    }
+                }
             }
         },
         "securitySchemes": {
@@ -63,8 +80,8 @@
             "post": {
                 "description": "Crear un usuario",
                 "tags": [
-                    "Register",
-                    "v1"
+                    "v1",
+                    "Register"
                 ],
                 "requestBody": {
                     "description": "Insertar datos del usuario",
@@ -215,7 +232,134 @@
                     }
                 }
             }
+        },
+        "/api/v1/perfectskin/servicios":{
+            "get": {
+                "description": "Obtener todos los servicios",
+                "tags": [
+                    "Services",
+                    "v1"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Obtenemos exitosamente los servicios"
+                    },
+                    "400": {
+                        "description": "Generamos un error en caso de que la peticion no se resuelva"
+                    }
+                }
+        },
+        "post": {
+            "description": "Crear un servicio  (Requiere admin rol)",
+            "tags": [
+                "Services",
+                "v1"
+            ],
+            "requestBody": {
+                "description": "Crear servicio nuevo",
+                "required": true,
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/Create Service"
+                        }
+                    }
+                }
+            },
+            "responses": {
+                "200": {
+                    "description": "Nuevo servicio creado exitosamente"
+                },
+                "401": {
+                    "description": "Generamos un error en caso de que la peticion no se resuelva"
+                }
+            }
         }
 
+    },
+    "/api/v1/perfectskin/servicios/{id}":{
+        "get": {
+            "parameters": [
+                {
+                    "name": "id",
+                    "in": "path",
+                    "description": "Id del servicio",
+                    "required": true,
+                    "type": "string"
+                }
+            ],
+            "description": "Obtenemos un servicio en especifico",
+            "tags": [
+                "Services",
+                "v1"
+            ],
+            "responses": {
+                "200": {
+                    "description": "Obtenemos exitosamente el servicio"
+                },
+                "400": {
+                    "description": "Generamos un error en caso de que la peticion no se resuelva"
+                }
+            }
+        },
+        "patch":{           
+            "description": "Editar servicio",
+            "tags": [
+                "Services",
+                "v1"
+            ],
+            "parameters": [
+                {
+                    "name": "id",
+                    "in": "path",
+                    "description": "Id del servicio",
+                    "required": true,
+                    "type": "string"
+                }
+            ],
+            "requestBody": {
+                "description": "Insertar datos del servicio",
+                "required": true,
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/Create Service"
+                        }
+                    }
+                }
+            },
+            "responses": {
+                "200":{
+                    "description": "Servicio editado exitosamente"
+                },
+                "400": {
+                    "description": "Generamos un error en caso de que la peticion no se resuelva"
+                }
+            }
+        },
+        "delete": {
+            "description": "Eliminar servicio",
+            "tags": [
+                "Services",
+                "v1"
+            ], "parameters": [
+                {
+                    "name": "id",
+                    "in": "path",
+                    "description": "Id del servicio",
+                    "required": true,
+                    "type": "string"
+                }
+            ],
+            "responses": {
+                "200": {
+                    "description": "Eliminaste exitosamente el servicio"
+                },
+                "400": {
+                    "description": "Generamos un error en caso de que la peticion no se resuelva"
+                }
+            }
+        }
     }
+}
 }
