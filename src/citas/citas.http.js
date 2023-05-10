@@ -5,6 +5,8 @@ const Roles = require('../models/roles.model')
 const Horarios = require('../models/horarios.models')
 const enviarCorreoCita = require('../utils/mailer')
 const {generarMensajeHTML} = require('../utils/mensajeHTML')
+const generarSMS = require('../utils/generarSMS')
+const sendMessage = require('../utils/sms')
 
 const getAll = (req, res) => {
     citasController.getAllCitas()
@@ -126,9 +128,10 @@ const register = async (req, res) => {
         const cita = result.data;
         const asunto = 'Confirmación de cita';
         const mensaje = generarMensajeHTML(cita, horario);
+        const messageBody = generarSMS(cita, horario)
         console.log(cita);
         enviarCorreoCita(user.email, asunto, mensaje);
-
+        sendMessage(user.telefono, messageBody)
         res.status(201).json({ data: result.data, message: `Appointment created successfully with id: ${result.data.id} for the day ${result.data.fecha}` });
     } else {
         res.status(400).json({ error: result.message });
