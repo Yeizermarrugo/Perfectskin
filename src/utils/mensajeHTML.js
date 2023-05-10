@@ -1,4 +1,12 @@
+const moment = require('moment-timezone');
+
 const generarMensajeHTML = (cita, horario) => {
+  const fecha = moment(cita.fecha).locale('es').tz('America/Bogota');
+  const nombreDia = fecha.format('dddd');
+  const diaMes = fecha.format('D');
+  const nombreMes = fecha.format('MMMM');
+
+
   return  `<!DOCTYPE html>
         <html>
         <head>
@@ -56,7 +64,8 @@ const generarMensajeHTML = (cita, horario) => {
             </div>
             <div class="content">
               <div class="message">
-                <p>¡Hola! Tu cita ha sido agendada para el <strong>${cita.fecha}</strong> a las <strong>${horario.hora}</strong>.</p>
+              <p>¡Hola! Tu cita ha sido agendada para el <strong>${nombreDia} ${diaMes} de ${nombreMes}</strong> a las <strong>${horario.hora}</strong>.</p>
+         
               </div>
             </div>
             <div class="footer">
