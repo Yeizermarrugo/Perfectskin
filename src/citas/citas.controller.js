@@ -95,6 +95,16 @@ const createCitas = async (data, userId,) => {
             message: 'La cita debe ser programada con al menos 1 día de anticipación'
         };
     }
+    console.log("Este es el fecha.getDay",fecha.getDay())
+
+    if (fecha.getDay() === 6) {
+        return {
+            success: false,
+            status: 400,
+            message: 'No se aceptan citas los domingos, por favor seleccione otra fecha'
+        };
+    }
+
     const existeFecha = await DayOff.findOne({
         where: { fecha: data.fecha }
     })
@@ -125,10 +135,10 @@ const createCitas = async (data, userId,) => {
 
 const editCita = async (citaId, newData) => {
     return Citas.update(newData, {
-      where: { id: citaId }
+        where: { id: citaId }
     });
-  }
-  
+}
+
 
 const deleteCita = async (id) => {
     const data = await Citas.destroy({
