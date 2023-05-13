@@ -2,11 +2,11 @@ const {getUserById} = require("../users/user.controller");
 const { ExtractJwt, Strategy } = require('passport-jwt')
 const passport = require('passport')
 
-const config = require('../../config').api 
+require('dotenv').config()
 
 const passportConfigs = {
     jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(), //? 
-    secretOrKey: config.secretOrKey
+    secretOrKey: process.env.JWT_SECRET
 }
 
 passport.use(new Strategy(passportConfigs, (tokenDecoded, done) => {
