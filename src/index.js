@@ -46,13 +46,13 @@ app.get('/', (req, res) => {
 
 
 
-app.use('/api/v1/perfectskin/users', userRoute);
-app.use('/api/v1/perfectskin/auth', authRoute);
-app.use('/api/v1/perfectskin/servicios', serviceRoute);
-app.use('/api/v1/perfectskin/horas', horarioRoute);
-app.use('/api/v1/perfectskin/dayoff', dayOffRoute);
-app.use('/api/v1/perfectskin/citas', citasRoute);
-app.use('/v1/perfectskin/doc', swaggerUi.serve, swaggerUi.setup(swaggerDoc))
+app.use('/v1/users', userRoute);
+app.use('/v1/auth', authRoute);
+app.use('/v1/servicios', serviceRoute);
+app.use('/v1/horas', horarioRoute);
+app.use('/v1/dayoff', dayOffRoute);
+app.use('/v1/citas', citasRoute);
+app.use('/v1/doc', swaggerUi.serve, swaggerUi.setup(swaggerDoc))
 app.use('*', (req, res)=> {
     resHandler.error({
         res,
