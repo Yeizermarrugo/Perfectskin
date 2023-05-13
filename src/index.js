@@ -39,7 +39,7 @@ app.get('/', (req, res) => {
         status: 200,
         message: 'Servidor inicializado correctamente',
         data: {
-            "Citas": `${config.host}/api/v1/perfectskin/citas`,
+            "Citas": `${config.host}/v1/citas`,
         }
     })
 })
