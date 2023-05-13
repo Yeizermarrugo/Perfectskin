@@ -76,7 +76,7 @@
         }
     ],
     "paths": {
-        "/api/v1/perfectskin/auth/register": {
+        "/v1/auth/register": {
             "post": {
                 "description": "Crear un usuario",
                 "tags": [
@@ -104,7 +104,7 @@
                 }
             }
         },
-        "/api/v1/perfectskin/auth/login": {
+        "/v1/auth/login": {
             "post": {
                 "description": "Iniciar sesion",
                 "tags": [
@@ -132,7 +132,7 @@
                 }
             }
         },
-        "/api/v1/perfectskin/users/": {
+        "/v1/users/": {
             "get": {
                 "description": "Obtener todos los usuarios",
                 "tags": [
@@ -149,7 +149,7 @@
                 }
             }
         },
-        "/api/v1/perfectskin/users/{id}": {
+        "/v1/users/{id}": {
             "get": {
                 "parameters": [
                     {
@@ -175,7 +175,7 @@
                 }
             }
         },
-        "/api/v1/perfectskin/users/me": {
+        "/v1/users/me": {
             "get": {
                 "description": "Obtener mi usuarios",
                 "tags": [
@@ -233,7 +233,7 @@
                 }
             }
         },
-        "/api/v1/perfectskin/servicios":{
+        "/v1/servicios":{
             "get": {
                 "description": "Obtener todos los servicios",
                 "tags": [
@@ -277,7 +277,7 @@
         }
 
     },
-    "/api/v1/perfectskin/servicios/{id}":{
+    "/v1/servicios/{id}":{
         "get": {
             "parameters": [
                 {
