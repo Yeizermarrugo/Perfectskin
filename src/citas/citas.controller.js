@@ -101,7 +101,7 @@ const createCitas = async (data, userId,) => {
         return {
             success: false,
             status: 400,
-            message: 'No se aceptan citas los domingos, por favor seleccione otra fecha'
+            message: 'No se agendan citas los domingos, por favor seleccione otra fecha'
         };
     }
 
