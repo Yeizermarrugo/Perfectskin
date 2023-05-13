@@ -124,7 +124,7 @@ const register = async (req, res) => {
     console.log("Este es el horario", horario);
 
     if (result.success) {
-        // Envía el correo electrónico después de que se crea la cita
+        // Envía el correo electrónico y mensaje de texto después de que se crea la cita
         const cita = result.data;
         const asunto = 'Confirmación de cita';
         const mensaje = generarMensajeHTML(cita, horario);
